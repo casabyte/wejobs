@@ -1,0 +1,7 @@
+# .gitignore
+node_modules/
+/generated/prisma
+/generated/prisma
+dist/
+build/
+.env

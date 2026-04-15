@@ -1,0 +1,21 @@
+services:
+  db:
+    build:
+      context: ./apps/db
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    container_name: wejobs-db
+    restart: always
+    # environment:
+    #   POSTGRES_USER: user_admin
+    #   POSTGRES_PASSWORD: password123
+    #   POSTGRES_DB: wejobs_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - wejobs_postgres_data:/var/lib/postgresql/data
+    
+
+volumes:
+  wejobs_postgres_data:
