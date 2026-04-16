@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { PrismaClient } from '@prisma/client/extension';
 import { PrismaModule } from 'prisma/prisma.module';
 import { JobsModule } from './modules/jobs/jobs.module';
 import { CompaniesModule } from './modules/companies/companies.module';
@@ -22,6 +23,7 @@ ConfigModule.forRoot({
 
 @Module({
   imports: [AuthModule, UsersModule, CompaniesModule, JobsModule, PrismaModule],
+  // imports: [AuthModule, PrismaModule, UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })
