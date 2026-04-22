@@ -13,20 +13,20 @@ import type { User } from '@prisma/client';
 export class CompaniesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(dto: CreateCompanyDto, owner: User) {
-    // A User can only own one Company (1-to-1 enforced by @unique on ownerId)
-    const existing = await this.prisma.client.company.findUnique({
-      where: { ownerId: owner.id },
-    });
+  async create(dto: CreateCompanyDto, user: User) {
+    // A User can only own one Company (1-to-1 enforced by @unique on creatorId)
+    // const existing = await this.prisma.client.company.findUnique({
+    //   where: { creatorId: user.id },
+    // });
 
-    if (existing) {
-      throw new ConflictException('You already have a company registered');
-    }
+    // if (existing) {
+    //   throw new ConflictException('You already have a company registered');
+    // }
 
     const company = await this.prisma.client.company.create({
       data: {
         ...dto,
-        ownerId: owner.id,
+        creatorId: user.id,
       },
     });
 
@@ -36,8 +36,8 @@ export class CompaniesService {
   async findAll() {
     return this.prisma.client.company.findMany({
       include: {
-        owner: {
-          select: { id: true, name: true, email: true }, // never expose password
+        creator: {
+          select: { id: true, firstname: true, lastname: true, email: true }, // never expose password
         },
         job: {
           select: { id: true, title: true, location: true, salary: true },
@@ -46,36 +46,36 @@ export class CompaniesService {
     });
   }
 
-  async findOne(id: string) {
-    const company = await this.prisma.client.company.findUnique({
-      where: { id },
-      include: {
-        owner: {
-          select: { id: true, name: true, email: true },
-        },
-        job: {
-          select: { id: true, title: true, location: true, salary: true },
-        },
-      },
-    });
+  // async findOne(id: string) {
+  //   const company = await this.prisma.client.company.findUnique({
+  //     where: { id },
+  //     include: {
+  //       owner: {
+  //         select: { id: true, firstname: true, email: true },
+  //       },
+  //       job: {
+  //         select: { id: true, title: true, location: true, salary: true },
+  //       },
+  //     },
+  //   });
 
-    if (!company) throw new NotFoundException('Company not found');
+  //   if (!company) throw new NotFoundException('Company not found');
 
-    return company;
-  }
+  //   return company;
+  // }
 
-  async findByOwner(ownerId: string) {
-    const company = await this.prisma.client.company.findUnique({
-      where: { ownerId },
-      include: {
-        job: true,
-      },
-    });
+  // async findByOwner(creatorId: string) {
+  //   const company = await this.prisma.client.company.findUnique({
+  //     where: { creatorId },
+  //     include: {
+  //       job: true,
+  //     },
+  //   });
 
-    if (!company) throw new NotFoundException('No company found for this user');
+  //   if (!company) throw new NotFoundException('No company found for this user');
 
-    return company;
-  }
+  //   return company;
+  // }
 
   async update(id: string, dto: UpdateCompanyDto, requestingUser: User) {
     const company = await this.prisma.client.company.findUnique({
@@ -86,7 +86,7 @@ export class CompaniesService {
 
     // Only the owner (or ADMIN) can update the company
     if (
-      company.ownerId !== requestingUser.id &&
+      company.creatorId !== requestingUser.id &&
       requestingUser.role !== 'ADMIN'
     ) {
       throw new ForbiddenException('You are not the owner of this company');
@@ -107,7 +107,7 @@ export class CompaniesService {
 
     // Only the owner or an ADMIN can delete the company
     if (
-      company.ownerId !== requestingUser.id &&
+      company.creatorId !== requestingUser.id &&
       requestingUser.role !== 'ADMIN'
     ) {
       throw new ForbiddenException('You are not the owner of this company');

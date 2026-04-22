@@ -1,3 +1,4 @@
+import Link from "next/dist/client/link";
 import RegisterForm from "./RegisterForm";
 
 
@@ -10,7 +11,8 @@ export default function Register()
             <div className="w-full max-w-md p-8 shadow bg-white rounded ">
                 <div className="mb-6 w-full flex flex-col items-center gap-2">
                     <h2 className="text-2xl font-bold text-center">Create account</h2>
-                    <span className="text-md text-gray-600 text-center">Already have an account? Sign in</span>
+                    <span className="text-md text-gray-600 text-center">Already have an account?  <Link href="/login" className="text-blue-500 hover:underline">Sign in</Link>
+                    </span>
                 </div>
                 <RegisterForm />
             </div>

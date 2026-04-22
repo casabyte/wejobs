@@ -22,6 +22,9 @@ export async function registerAction (prevState: any, formData: FormData) : Prom
     headers: {'Content-Type': 'application/json'},
   })
 
+
+  
+
   if (!res.ok)
     return {status: 'ERROR', message: 'Invalid credentials'};
 

@@ -10,14 +10,14 @@ export class CreateJobDto {
   @IsString()
   description!: string;
 
-  @ApiProperty({ example: 'Tech Corp' })
-  @IsString()
-  company!: string;
-
   @ApiProperty({ example: 'San Francisco, CA' })
   location!: string;
 
   @ApiProperty({ example: 100000 })
   @IsNumber()
   salary?: number;
+
+  @ApiProperty({ example: 'company-id' })
+  @IsString()
+  companyId!: string;
 }

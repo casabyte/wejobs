@@ -7,7 +7,8 @@ import { Role } from '@prisma/client';
 export class UserResponseDto {
   @Expose() id: string;
   @Expose() email: string;
-  @Expose() name: string;
+  @Expose() firstname: string;
+  @Expose() lastname: string;
   @Expose() role: Role;
   @Expose() avatar: string | null;
   @Expose() createdAt: Date;

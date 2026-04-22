@@ -54,22 +54,22 @@ export class CompaniesController {
 
   // GET /companies/me
   // Returns the company owned by the currently authenticated user
-  @Get('me')
-  @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: "Get the current user's company" })
-  async findMine(@CurrentUser() user: User): Promise<CompanyResponseDto> {
-    const company = await this.companiesService.findByOwner(user.id);
-    return new CompanyResponseDto(company);
-  }
+  // @Get('me')
+  // @UseGuards(JwtAuthGuard)
+  // @ApiOperation({ summary: "Get the current user's company" })
+  // async findMine(@CurrentUser() user: User): Promise<CompanyResponseDto> {
+  //   const company = await this.companiesService.findByOwner(user.id);
+  //   return new CompanyResponseDto(company);
+  // }
 
   // GET /companies/:id
-  @Get(':id')
-  @ApiOperation({ summary: 'Get a company by ID' })
-  @ApiParam({ name: 'id', type: String })
-  async findOne(@Param('id') id: string): Promise<CompanyResponseDto> {
-    const company = await this.companiesService.findOne(id);
-    return new CompanyResponseDto(company);
-  }
+  // @Get(':id')
+  // @ApiOperation({ summary: 'Get a company by ID' })
+  // @ApiParam({ name: 'id', type: String })
+  // async findOne(@Param('id') id: string): Promise<CompanyResponseDto> {
+  //   const company = await this.companiesService.findOne(id);
+  //   return new CompanyResponseDto(company);
+  // }
 
   // PATCH /companies/:id
   // Only the owner or ADMIN can update

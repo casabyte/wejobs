@@ -4,7 +4,11 @@ import { IsString, IsOptional, IsUrl } from 'class-validator';
 export class UpdateUserDto {
   @IsOptional()
   @IsString()
-  name?: string;
+  firstname?: string;
+  
+  @IsOptional()
+  @IsString()
+  lastname?: string;
 
   @IsOptional()
   @IsUrl()

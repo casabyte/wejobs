@@ -1,5 +1,6 @@
 'use server'
-
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export type ActionState<T = any> = {
     status: 'IDLE' | 'SUCCESS' | 'ERROR',
@@ -24,5 +25,17 @@ export async function loginAction (prevState: any, formData: FormData) : Promise
     return {status: 'ERROR', message: 'Invalid credentials'};
 
   const data = await res.json();
-  return {status: 'SUCCESS', data: data.access_token};
+  const token = data.access_token;
+
+  (await cookies()).set('session_token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 60 * 60 * 24, // 1 day
+  });
+
+  redirect('/');
+
+  // return {status: 'SUCCESS', data: data.access_token};
 }

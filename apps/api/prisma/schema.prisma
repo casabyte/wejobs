@@ -21,11 +21,13 @@ enum Role {
 model User {
   id       String   @id @default(uuid())
   email    String   @unique
-  name     String
+  firstname     String
+  lastname     String
   password String
   role     Role     @default(CANDIDATE)
   avatar   String?
-  company  Company? // one-to-one relationship with Company
+  companies  Company[] @relation("UserCreatedCompanies") // one-to-many relationship with Company
+  jobs     Job[] // one-to-many relationship with Job
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -43,11 +45,34 @@ model Job {
   companyId String
   company   Company @relation(fields: [companyId], references: [id])
 
+  employerId    String
+  employer      User     @relation(fields: [employerId], references: [id])
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("jobs") // maps to "jobs" table in DB
 }
+
+
+
+// model Company {
+//   id          String   @id @default(cuid())
+//   name        String   @unique
+//   logo        String?
+//   website     String?
+//   jobs        Job[]
+//   members     User[]   // Employers belong to the company
+// }
+
+// model Job {
+//   id          String   @id @default(cuid())
+//   title       String
+//   companyId   String
+//   company     Company  @relation(fields: [companyId], references: [id])
+//   authorId    String
+//   author      User     @relation(fields: [authorId], references: [id])
+// }
 
 model Company {
   id          String   @id @default(uuid())
@@ -60,8 +85,13 @@ model Company {
   job         Job[] // one-to-many relationship with Job
 
 // Relation: A Company belongs to one User (Owner)
-  ownerId     String   @unique // This must be @unique for 1-to-1
-  owner       User     @relation(fields: [ownerId], references: [id])
+  // ownerId     String   @unique // This must be @unique for 1-to-1
+  // owner       User     @relation(fields: [ownerId], references: [id])
+
+
+
+  creatorId String
+  creator   User     @relation("UserCreatedCompanies", fields: [creatorId], references: [id])
 
   @@map("companies") // maps to "companies" table in DB
 }
